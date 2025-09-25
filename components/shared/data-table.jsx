@@ -42,6 +42,18 @@ export function DataTable({
     if (type === "date") {
       return new Date(value).toLocaleDateString("es-AR")
     }
+    if (type === "tags") {
+      const items = Array.isArray(value) ? value : []
+      return (
+        <div className="flex flex-wrap gap-1">
+          {items.map((v, i) => (
+            <span key={i} className="inline-block rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+              {v}
+            </span>
+          ))}
+        </div>
+      )
+    }
     return value
   }
 
