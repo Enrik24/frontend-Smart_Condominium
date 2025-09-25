@@ -58,16 +58,49 @@ export default function RolesPage() {
     {
       name: "permisos",
       label: "Permisos",
-      type: "select",
+      type: "permissions",
       required: false,
-      multiple: true,
-      options: [
-        { value: "ver_dashboard", label: "Ver Dashboard" },
-        { value: "gestionar_usuarios", label: "Gestionar Usuarios" },
-        { value: "gestionar_multas", label: "Gestionar Multas" },
-        { value: "gestionar_avisos", label: "Gestionar Avisos" },
-        { value: "gestionar_reportes", label: "Gestionar Reportes" },
-        { value: "gestionar_configuracion", label: "Gestionar Configuración" },
+      // Para añadir nuevas categorías o mapear desde API, modifica 'categories'
+      categories: [
+        {
+          name: "Usuarios",
+          items: [
+            { value: "Leer usuarios", label: "Leer usuarios" },
+            { value: "Crear usuarios", label: "Crear usuarios" },
+            { value: "Editar usuarios", label: "Editar usuarios" },
+            { value: "Eliminar usuarios", label: "Eliminar usuarios" },
+          ],
+        },
+        {
+          name: "Roles",
+          items: [
+            { value: "Leer roles", label: "Leer roles" },
+            { value: "Crear roles", label: "Crear roles" },
+            { value: "Editar roles", label: "Editar roles" },
+            { value: "Eliminar roles", label: "Eliminar roles" },
+          ],
+        },
+        {
+          name: "Permisos",
+          items: [
+            { value: "Leer permisos", label: "Leer permisos" },
+            { value: "Crear permisos", label: "Crear permisos" },
+            { value: "Editar permisos", label: "Editar permisos" },
+            { value: "Eliminar permisos", label: "Eliminar permisos" },
+          ],
+        },
+        {
+          name: "Reportes",
+          items: [
+            { value: "Generar reportes", label: "Generar reportes" },
+          ],
+        },
+        {
+          name: "Bitacora",
+          items: [
+            { value: "Ver auditoría", label: "Ver auditoría" },
+          ],
+        },
       ],
       fullWidth: true
     },
