@@ -58,6 +58,12 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
         if (field.maxLength && value.length > field.maxLength) {
           newErrors[field.name] = `${field.label} debe tener como máximo ${field.maxLength} caracteres`
         }
+        if (field.pattern) {
+          const regex = typeof field.pattern === 'string' ? new RegExp(field.pattern) : field.pattern
+          if (!regex.test(value)) {
+            newErrors[field.name] = field.patternMessage || `${field.label} tiene un formato inválido`
+          }
+        }
       }
     })
 

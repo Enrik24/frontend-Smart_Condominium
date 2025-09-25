@@ -6,7 +6,7 @@ import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle } from "lucide-react"
-import { authApiService } from "@/lib/services/authService"
+import { permisosApiService } from "@/lib/services/permisosService"
 import { useCrud } from "@/hooks/useApi"
 
 export default function PermisosPage() {
@@ -24,10 +24,10 @@ export default function PermisosPage() {
     updateItem,
     deleteItem,
   } = useCrud({
-    get: () => Promise.resolve({ success: true, data: { results: [] } }), // Ajustar según endpoint real
-    create: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    update: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    delete: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
+    get: permisosApiService.get,
+    create: permisosApiService.create,
+    update: permisosApiService.update,
+    delete: permisosApiService.delete,
   })
 
   // Cargar datos al montar el componente
@@ -42,11 +42,11 @@ export default function PermisosPage() {
   ]
 
   const formFields = [
-    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Gestionar Multas" },
-    { 
-      name: "recurso", 
-      label: "Recurso", 
-      type: "select", 
+    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Gestionar Multas", minLength: 3, maxLength: 50 },
+    {
+      name: "recurso",
+      label: "Recurso",
+      type: "select",
       required: true,
       options: [
         { value: "multas", label: "Multas" },
@@ -61,7 +61,7 @@ export default function PermisosPage() {
         { value: "areas_comunes", label: "Áreas Comunes" },
       ]
     },
-    { name: "codigo", label: "Código", type: "text", required: true, placeholder: "multas.gestionar" },
+    { name: "codigo", label: "Código", type: "text", required: true, placeholder: "multas.gestionar", minLength: 3, maxLength: 100, pattern: "^[a-z0-9._-]+$", patternMessage: "Solo letras minúsculas, números, punto, guion y guion bajo" },
   ]
 
   const handleAdd = () => {
