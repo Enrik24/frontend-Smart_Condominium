@@ -42,7 +42,7 @@ export default function VehiculosPage() {
     { key: "color", label: "Color" },
     { key: "residente", label: "Residente" },
     { key: "unidad_habitacional", label: "Unidad" },
-    { key: "activo", label: "Activo", type: "badge" },
+    { key: "activo", label: "Estado", type: "badge" },
   ]
 
   const formFields = [
@@ -73,7 +73,16 @@ export default function VehiculosPage() {
         { value: "4", label: "B-202" },
       ]
     },
-    { name: "activo", label: "Activo", type: "checkbox", required: false },
+    {
+      name: "activo",
+      label: "Estado",
+      type: "select",
+      required: false,
+      options: [
+        { value: "true", label: "Activo" },
+        { value: "false", label: "Inactivo" },
+      ]
+    },
   ]
 
   const handleAdd = () => {
@@ -95,11 +104,17 @@ export default function VehiculosPage() {
   const handleSubmit = async (formData) => {
     setIsSubmitting(true)
 
+    // Mapear estado string -> boolean para backend
+    const payload = {
+      ...formData,
+      activo: typeof formData.activo === 'string' ? formData.activo === 'true' : !!formData.activo,
+    }
+
     try {
       if (editingItem) {
-        await updateItem(editingItem.id, formData)
+        await updateItem(editingItem.id, payload)
       } else {
-        await createItem(formData)
+        await createItem(payload)
       }
 
       setIsModalOpen(false)
@@ -139,7 +154,7 @@ export default function VehiculosPage() {
         onSubmit={handleSubmit}
         title={editingItem ? "Editar Vehículo" : "Agregar Vehículo"}
         fields={formFields}
-        initialData={editingItem || {}}
+        initialData={editingItem ? { ...editingItem, activo: editingItem.activo !== undefined ? String(!!editingItem.activo) : "" } : {}}
         isLoading={isSubmitting}
       />
     </DashboardLayout>
