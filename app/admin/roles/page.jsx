@@ -40,32 +40,34 @@ export default function RolesPage() {
   const columns = [
     { key: "nombre", label: "Nombre" },
     { key: "descripcion", label: "Descripción" },
-    { key: "permisos", label: "Permisos" },
+    { key: "permisos", label: "Permisos", type: "tags" },
   ]
 
   const formFields = [
-    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Administrador" },
-    { 
-      name: "descripcion", 
-      label: "Descripción", 
-      type: "textarea", 
-      required: false, 
+    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Administrador", minLength: 3, maxLength: 50 },
+    {
+      name: "descripcion",
+      label: "Descripción",
+      type: "textarea",
+      required: true,
       placeholder: "Breve explicación del rol",
-      fullWidth: true 
+      minLength: 5,
+      maxLength: 200,
+      fullWidth: true
     },
-    { 
-      name: "permisos", 
-      label: "Permisos", 
-      type: "select", 
+    {
+      name: "permisos",
+      label: "Permisos",
+      type: "select",
       required: false,
       multiple: true,
       options: [
-        { value: "1", label: "Ver Dashboard" },
-        { value: "2", label: "Gestionar Usuarios" },
-        { value: "3", label: "Gestionar Multas" },
-        { value: "4", label: "Gestionar Avisos" },
-        { value: "5", label: "Gestionar Reportes" },
-        { value: "6", label: "Gestionar Configuración" },
+        { value: "ver_dashboard", label: "Ver Dashboard" },
+        { value: "gestionar_usuarios", label: "Gestionar Usuarios" },
+        { value: "gestionar_multas", label: "Gestionar Multas" },
+        { value: "gestionar_avisos", label: "Gestionar Avisos" },
+        { value: "gestionar_reportes", label: "Gestionar Reportes" },
+        { value: "gestionar_configuracion", label: "Gestionar Configuración" },
       ],
       fullWidth: true
     },
