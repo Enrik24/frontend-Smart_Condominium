@@ -6,7 +6,7 @@ import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle } from "lucide-react"
-import { authApiService } from "@/lib/services/authService"
+import { rolesApiService } from "@/lib/services/rolesService"
 import { useCrud } from "@/hooks/useApi"
 
 export default function RolesPage() {
