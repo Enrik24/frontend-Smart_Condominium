@@ -31,16 +31,33 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
     const newErrors = {}
 
     fields.forEach((field) => {
-      if (field.required && !formData[field.name]) {
-        newErrors[field.name] = `${field.label} es obligatorio`
+      const value = formData[field.name]
+
+      if (field.required) {
+        if (field.type === 'select' && field.multiple) {
+          if (!Array.isArray(value) || value.length === 0) {
+            newErrors[field.name] = `${field.label} es obligatorio`
+          }
+        } else if (!value) {
+          newErrors[field.name] = `${field.label} es obligatorio`
+        }
       }
 
-      if (field.type === "email" && formData[field.name] && !/\S+@\S+\.\S+/.test(formData[field.name])) {
+      if (field.type === "email" && value && !/\S+@\S+\.\S+/.test(value)) {
         newErrors[field.name] = "Email inválido"
       }
 
-      if (field.type === "number" && formData[field.name] && formData[field.name] <= 0) {
+      if (field.type === "number" && (value || value === 0) && Number(value) <= 0) {
         newErrors[field.name] = "Debe ser mayor a 0"
+      }
+
+      if (typeof value === 'string') {
+        if (field.minLength && value.length < field.minLength) {
+          newErrors[field.name] = `${field.label} debe tener al menos ${field.minLength} caracteres`
+        }
+        if (field.maxLength && value.length > field.maxLength) {
+          newErrors[field.name] = `${field.label} debe tener como máximo ${field.maxLength} caracteres`
+        }
       }
     })
 
@@ -69,6 +86,28 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
 
     switch (field.type) {
       case "select":
+        if (field.multiple) {
+          const selected = Array.isArray(formData[field.name]) ? formData[field.name] : []
+          const toggle = (val) => {
+            const exists = selected.includes(val)
+            const next = exists ? selected.filter((v) => v !== val) : [...selected, val]
+            handleChange(field.name, next)
+          }
+          return (
+            <div className="grid gap-2">
+              {field.options?.map((option) => (
+                <label key={option.value} className="flex items-center gap-2">
+                  <Checkbox
+                    id={`${field.name}-${option.value}`}
+                    checked={selected.includes(option.value)}
+                    onCheckedChange={() => toggle(option.value)}
+                  />
+                  <span className="text-sm">{option.label}</span>
+                </label>
+              ))}
+            </div>
+          )
+        }
         return (
           <Select value={formData[field.name] || ""} onValueChange={(value) => handleChange(field.name, value)}>
             <SelectTrigger className={errors[field.name] ? "border-destructive" : ""}>
