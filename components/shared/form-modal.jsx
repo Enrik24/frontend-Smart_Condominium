@@ -115,13 +115,13 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
           )
         }
         return (
-          <Select value={formData[field.name] || ""} onValueChange={(value) => handleChange(field.name, value)}>
+          <Select value={formData[field.name] !== undefined && formData[field.name] !== null ? String(formData[field.name]) : ""} onValueChange={(value) => handleChange(field.name, value)}>
             <SelectTrigger className={errors[field.name] ? "border-destructive" : ""}>
               <SelectValue placeholder={field.placeholder} />
             </SelectTrigger>
             <SelectContent>
               {field.options?.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={String(option.value)}>
                   {option.label}
                 </SelectItem>
               ))}
