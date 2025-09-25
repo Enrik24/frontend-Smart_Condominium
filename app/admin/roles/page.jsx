@@ -15,10 +15,10 @@ export default function RolesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const apiService = useMemo(() => ({
-    get: () => Promise.resolve({ success: true, data: { results: [] } }), // Ajustar según endpoint real
-    create: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    update: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    delete: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
+    get: rolesApiService.get,
+    create: rolesApiService.create,
+    update: rolesApiService.update,
+    delete: rolesApiService.delete,
   }), []);
 
   // Usar el hook personalizado para manejar CRUD
