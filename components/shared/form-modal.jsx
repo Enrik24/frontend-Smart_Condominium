@@ -34,7 +34,7 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
       const value = formData[field.name]
 
       if (field.required) {
-        if (field.type === 'select' && field.multiple) {
+        if ((field.type === 'select' && field.multiple) || field.type === 'permissions') {
           if (!Array.isArray(value) || value.length === 0) {
             newErrors[field.name] = `${field.label} es obligatorio`
           }
@@ -122,6 +122,39 @@ export function FormModal({ isOpen, onClose, onSubmit, title, fields = [], initi
             </SelectContent>
           </Select>
         )
+      case "permissions":
+        {
+          const selected = Array.isArray(formData[field.name]) ? formData[field.name] : []
+          const toggle = (val) => {
+            const exists = selected.includes(val)
+            const next = exists ? selected.filter((v) => v !== val) : [...selected, val]
+            handleChange(field.name, next)
+          }
+          return (
+            <div className="max-h-64 overflow-y-auto pr-1">
+              {/* Para añadir/modificar categorías o traerlas desde API, edita field.categories a continuación */}
+              <div className="grid gap-4">
+                {field.categories?.map((cat) => (
+                  <div key={cat.key || cat.name}>
+                    <div className="mb-2 text-sm font-medium text-muted-foreground">{cat.name}</div>
+                    <div className="grid gap-2">
+                      {cat.items?.map((opt) => (
+                        <label key={opt.value} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`${field.name}-${opt.value}`}
+                            checked={selected.includes(opt.value)}
+                            onCheckedChange={() => toggle(opt.value)}
+                          />
+                          <span className="text-sm">{opt.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        }
 
       case "textarea":
         return <Textarea {...commonProps} placeholder={field.placeholder} rows={3} />
