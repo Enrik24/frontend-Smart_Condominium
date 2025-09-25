@@ -14,9 +14,11 @@ export function DashboardLayout({ children }) {
     // This effect runs only on the client, after the initial render
     setIsClient(true)
 
+    /*
     if (!authService.isAuthenticated()) {
       router.push("/login")
     }
+    */
   }, [router])
 
   // On the server and initial client render, `isClient` is false.
@@ -29,6 +31,7 @@ export function DashboardLayout({ children }) {
     )
   }
 
+  /*
   // A second check to prevent content flashing for unauthenticated users while redirecting
   if (!authService.isAuthenticated()) {
     return (
@@ -37,6 +40,7 @@ export function DashboardLayout({ children }) {
       </div>
     )
   }
+  */
 
   return (
     <div className="min-h-screen bg-background flex">
