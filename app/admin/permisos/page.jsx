@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function PermisosPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const permisosApi = useMemo(() => ({
+    get: permisosApiService.get,
+    create: permisosApiService.create,
+    update: permisosApiService.update,
+    delete: permisosApiService.delete,
+  }), [])
+
   const {
     items: permisos,
     loading,
@@ -23,12 +30,7 @@ export default function PermisosPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: permisosApiService.get,
-    create: permisosApiService.create,
-    update: permisosApiService.update,
-    delete: permisosApiService.delete,
-  })
+  } = useCrud(permisosApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

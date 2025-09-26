@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function ConfiguracionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const configuracionApi = useMemo(() => ({
+    get: configuracionApiService.getConfiguraciones,
+    create: configuracionApiService.createConfiguracion,
+    update: configuracionApiService.updateConfiguracion,
+    delete: configuracionApiService.deleteConfiguracion,
+  }), [])
+
   const {
     items: configuraciones,
     loading,
@@ -23,12 +30,7 @@ export default function ConfiguracionPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: configuracionApiService.getConfiguraciones,
-    create: configuracionApiService.createConfiguracion,
-    update: configuracionApiService.updateConfiguracion,
-    delete: configuracionApiService.deleteConfiguracion,
-  })
+  } = useCrud(configuracionApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

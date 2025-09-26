@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function ExpensasPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const expensasApi = useMemo(() => ({
+    get: finanzasApiService.getExpensas,
+    create: finanzasApiService.createExpensa,
+    update: finanzasApiService.updateExpensa,
+    delete: finanzasApiService.deleteExpensa,
+  }), [])
+
   const {
     items: expensas,
     loading,
@@ -23,12 +30,7 @@ export default function ExpensasPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: finanzasApiService.getExpensas,
-    create: finanzasApiService.createExpensa,
-    update: finanzasApiService.updateExpensa,
-    delete: finanzasApiService.deleteExpensa,
-  })
+  } = useCrud(expensasApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

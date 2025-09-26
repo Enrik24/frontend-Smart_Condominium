@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function VehiculosPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const vehiculosApi = useMemo(() => ({
+    get: unidadesApiService.getVehiculos,
+    create: unidadesApiService.createVehiculo,
+    update: unidadesApiService.updateVehiculo,
+    delete: unidadesApiService.deleteVehiculo,
+  }), [])
+
   const {
     items: vehiculos,
     loading,
@@ -23,12 +30,7 @@ export default function VehiculosPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: unidadesApiService.getVehiculos,
-    create: unidadesApiService.createVehiculo,
-    update: unidadesApiService.updateVehiculo,
-    delete: unidadesApiService.deleteVehiculo,
-  })
+  } = useCrud(vehiculosApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

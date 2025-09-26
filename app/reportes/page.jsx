@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function ReportesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const reportesApi = useMemo(() => ({
+    get: reportesApiService.getReportes,
+    create: reportesApiService.createReporte,
+    update: reportesApiService.updateReporte,
+    delete: reportesApiService.deleteReporte,
+  }), [])
+
   const {
     items: reportes,
     loading,
@@ -23,12 +30,7 @@ export default function ReportesPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: reportesApiService.getReportes,
-    create: reportesApiService.createReporte,
-    update: reportesApiService.updateReporte,
-    delete: reportesApiService.deleteReporte,
-  })
+  } = useCrud(reportesApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {
