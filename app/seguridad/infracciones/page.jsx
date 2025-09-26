@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function InfraccionesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const infraccionesApi = useMemo(() => ({
+    get: seguridadApiService.getInfracciones,
+    create: seguridadApiService.createInfraccion,
+    update: seguridadApiService.updateInfraccion,
+    delete: seguridadApiService.deleteInfraccion,
+  }), [])
+
   const {
     items: infracciones,
     loading,
@@ -23,12 +30,7 @@ export default function InfraccionesPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: seguridadApiService.getInfracciones,
-    create: seguridadApiService.createInfraccion,
-    update: seguridadApiService.updateInfraccion,
-    delete: seguridadApiService.deleteInfraccion,
-  })
+  } = useCrud(infraccionesApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

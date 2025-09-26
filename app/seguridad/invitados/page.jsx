@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function InvitadosPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const invitadosApi = useMemo(() => ({
+    get: seguridadApiService.getInvitados,
+    create: seguridadApiService.createInvitado,
+    update: seguridadApiService.updateInvitado,
+    delete: seguridadApiService.deleteInvitado,
+  }), [])
+
   const {
     items: invitados,
     loading,
@@ -23,12 +30,7 @@ export default function InvitadosPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: seguridadApiService.getInvitados,
-    create: seguridadApiService.createInvitado,
-    update: seguridadApiService.updateInvitado,
-    delete: seguridadApiService.deleteInvitado,
-  })
+  } = useCrud(invitadosApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

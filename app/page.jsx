@@ -8,12 +8,16 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
+    // Redirect to dashboard while auth is disabled
+    router.push("/dashboard")
+    /*
     // Redirect to dashboard if authenticated, otherwise to login
     if (authService.isAuthenticated()) {
       router.push("/dashboard")
     } else {
       router.push("/login")
     }
+    */
   }, [router])
 
   return (

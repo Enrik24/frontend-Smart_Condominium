@@ -6,7 +6,7 @@ import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle } from "lucide-react"
-import { authApiService } from "@/lib/services/authService"
+import { rolesApiService } from "@/lib/services/rolesService"
 import { useCrud } from "@/hooks/useApi"
 
 export default function RolesPage() {
@@ -15,10 +15,10 @@ export default function RolesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const apiService = useMemo(() => ({
-    get: () => Promise.resolve({ success: true, data: { results: [] } }), // Ajustar según endpoint real
-    create: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    update: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
-    delete: () => Promise.resolve({ success: true, data: {} }), // Ajustar según endpoint real
+    get: rolesApiService.get,
+    create: rolesApiService.create,
+    update: rolesApiService.update,
+    delete: rolesApiService.delete,
   }), []);
 
   // Usar el hook personalizado para manejar CRUD
@@ -40,32 +40,67 @@ export default function RolesPage() {
   const columns = [
     { key: "nombre", label: "Nombre" },
     { key: "descripcion", label: "Descripción" },
-    { key: "permisos", label: "Permisos" },
+    { key: "permisos", label: "Permisos", type: "tags" },
   ]
 
   const formFields = [
-    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Administrador" },
-    { 
-      name: "descripcion", 
-      label: "Descripción", 
-      type: "textarea", 
-      required: false, 
+    { name: "nombre", label: "Nombre", type: "text", required: true, placeholder: "Administrador", minLength: 3, maxLength: 50 },
+    {
+      name: "descripcion",
+      label: "Descripción",
+      type: "textarea",
+      required: true,
       placeholder: "Breve explicación del rol",
-      fullWidth: true 
+      minLength: 5,
+      maxLength: 200,
+      fullWidth: true
     },
-    { 
-      name: "permisos", 
-      label: "Permisos", 
-      type: "select", 
+    {
+      name: "permisos",
+      label: "Permisos",
+      type: "permissions",
       required: false,
-      multiple: true,
-      options: [
-        { value: "1", label: "Ver Dashboard" },
-        { value: "2", label: "Gestionar Usuarios" },
-        { value: "3", label: "Gestionar Multas" },
-        { value: "4", label: "Gestionar Avisos" },
-        { value: "5", label: "Gestionar Reportes" },
-        { value: "6", label: "Gestionar Configuración" },
+      // Para añadir nuevas categorías o mapear desde API, modifica 'categories'
+      categories: [
+        {
+          name: "Usuarios",
+          items: [
+            { value: "Leer usuarios", label: "Leer usuarios" },
+            { value: "Crear usuarios", label: "Crear usuarios" },
+            { value: "Editar usuarios", label: "Editar usuarios" },
+            { value: "Eliminar usuarios", label: "Eliminar usuarios" },
+          ],
+        },
+        {
+          name: "Roles",
+          items: [
+            { value: "Leer roles", label: "Leer roles" },
+            { value: "Crear roles", label: "Crear roles" },
+            { value: "Editar roles", label: "Editar roles" },
+            { value: "Eliminar roles", label: "Eliminar roles" },
+          ],
+        },
+        {
+          name: "Permisos",
+          items: [
+            { value: "Leer permisos", label: "Leer permisos" },
+            { value: "Crear permisos", label: "Crear permisos" },
+            { value: "Editar permisos", label: "Editar permisos" },
+            { value: "Eliminar permisos", label: "Eliminar permisos" },
+          ],
+        },
+        {
+          name: "Reportes",
+          items: [
+            { value: "Generar reportes", label: "Generar reportes" },
+          ],
+        },
+        {
+          name: "Bitacora",
+          items: [
+            { value: "Ver auditoría", label: "Ver auditoría" },
+          ],
+        },
       ],
       fullWidth: true
     },

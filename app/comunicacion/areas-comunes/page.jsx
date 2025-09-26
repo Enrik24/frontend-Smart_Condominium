@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function AreasComunesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const areasApi = useMemo(() => ({
+    get: areasComunesApiService.getAreasComunes,
+    create: areasComunesApiService.createAreaComun,
+    update: areasComunesApiService.updateAreaComun,
+    delete: areasComunesApiService.deleteAreaComun,
+  }), [])
+
   const {
     items: areas,
     loading,
@@ -23,12 +30,7 @@ export default function AreasComunesPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: areasComunesApiService.getAreasComunes,
-    create: areasComunesApiService.createAreaComun,
-    update: areasComunesApiService.updateAreaComun,
-    delete: areasComunesApiService.deleteAreaComun,
-  })
+  } = useCrud(areasApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { DataTable } from "@/components/shared/data-table"
 import { FormModal } from "@/components/shared/form-modal"
@@ -15,6 +15,13 @@ export default function ReservasPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Usar el hook personalizado para manejar CRUD
+  const reservasApi = useMemo(() => ({
+    get: areasComunesApiService.getReservas,
+    create: areasComunesApiService.createReserva,
+    update: areasComunesApiService.updateReserva,
+    delete: areasComunesApiService.deleteReserva,
+  }), [])
+
   const {
     items: reservas,
     loading,
@@ -23,12 +30,7 @@ export default function ReservasPage() {
     createItem,
     updateItem,
     deleteItem,
-  } = useCrud({
-    get: areasComunesApiService.getReservas,
-    create: areasComunesApiService.createReserva,
-    update: areasComunesApiService.updateReserva,
-    delete: areasComunesApiService.deleteReserva,
-  })
+  } = useCrud(reservasApi)
 
   // Cargar datos al montar el componente
   useEffect(() => {

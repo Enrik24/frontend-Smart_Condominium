@@ -82,7 +82,6 @@ export default function AvisosPage() {
     },
     { name: "importante", label: "Importante", type: "checkbox", required: false },
     { name: "fechaPublicacion", label: "Fecha de Publicación", type: "datetime-local", required: false },
-    { name: "administrador", label: "Administrador", type: "hidden", required: true }, // Se autocompleta desde sesión
   ]
 
   const handleAdd = () => {
@@ -105,10 +104,6 @@ export default function AvisosPage() {
     setIsSubmitting(true)
 
     try {
-      // Autocompletar el administrador desde la sesión actual
-      const currentUser = JSON.parse(localStorage.getItem('condominium_user_data') || '{}')
-      formData.administrador = currentUser.id || 1
-
       if (editingItem) {
         await updateItem(editingItem.id, formData)
       } else {
