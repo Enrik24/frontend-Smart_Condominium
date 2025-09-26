@@ -42,6 +42,9 @@ export function DataTable({
     if (type === "date") {
       return new Date(value).toLocaleDateString("es-AR")
     }
+    if (type === "datetime") {
+      return new Date(value).toLocaleString("es-AR")
+    }
     if (type === "tags") {
       const items = Array.isArray(value) ? value : []
       return (
